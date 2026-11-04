@@ -1,0 +1,23 @@
+# Serve the CONTENTS of dist/ from /var/www/homekeeper.
+# Put this server block in your own nginx configuration and adjust the host/root.
+server {
+    listen 80;
+    server_name localhost;
+    root /var/www/homekeeper;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    location /assets/ {
+        try_files $uri =404;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+    location /references/ {
+        try_files $uri =404;
+    }
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+}
